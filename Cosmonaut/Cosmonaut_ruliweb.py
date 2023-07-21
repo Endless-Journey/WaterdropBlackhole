@@ -4,7 +4,7 @@ import pymysql
 import time
 from datetime import date, datetime
 import os
-import Cosmonaut_processor
+from Processor import Cosmonaut_processor
 import Secure_core
 
 
@@ -37,7 +37,8 @@ def method_ruliweb():
     #---info---
 
     status_start = "start"
-    Cosmonaut_processor.status_logging(col_date, module_name, status_start, 0)
+    processor = Cosmonaut_processor.processor_class(site, list_URL, list_category, rd, page_str) #TODO :
+    processor.status_logging(col_date, module_name, status_start, 0)
     # ---logging---
 
     db = pymysql.connect(host=login_info["host"],

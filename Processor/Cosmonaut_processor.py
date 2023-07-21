@@ -4,13 +4,14 @@ import requests
 import hashlib
 import os
 import pymysql
-from Alpha.Public import Secure_core
+import Secure_core
 import re
 import urllib.request
 import time
 import io
 import cv2
 import numpy as np
+
 
 class processor_class:
     def __init__(self, site, list_URL, list_category, rd, page_str):
@@ -19,7 +20,7 @@ class processor_class:
         self.list_category = list_category
         self.rd = rd
         self.page_str = page_str
-        #---변수---
+        # ---변수---
         self.col_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.date_Ymd = date.today().strftime('%Y%m%d')
         self.module_name = "Cosmonaut_" + self.site
@@ -27,11 +28,11 @@ class processor_class:
         self.table_1 = "db_%s_1_" % self.site + self.date_Ymd
 
         self.db = pymysql.connect(host=self.login_info["host"],
-                             port=self.login_info["port"],
-                             user=self.login_info["user"],
-                             passwd=self.login_info["passwd"],
-                             charset=self.login_info["charset"],
-                             db='db_%s' % self.site)
+                                  port=self.login_info["port"],
+                                  user=self.login_info["user"],
+                                  passwd=self.login_info["passwd"],
+                                  charset=self.login_info["charset"],
+                                  db='db_%s' % self.site)
         self.db.set_charset("utf8mb4")
         self.curs = self.db.cursor()
 
@@ -66,7 +67,7 @@ class processor_class:
         try:
             sql_2_1 = """
                 SELECT article_url FROM db_%s_duplication_check;
-                """%self.site
+                """ % self.site
             sql_2_2 = """
                 SELECT article_url FROM db_%s_duplication_check WHERE (category = '%s');
                 """ % (self.site, self.list_category[k0])
@@ -120,12 +121,14 @@ class processor_class:
                 article_url_list.pop(0)
             article_url_list.append(URL_2_temp_2)
 
-    def save_info(self, k1, col_date, category, URL_2, article_title, good, bad, hits, article_text, article_comment, image_dir):
+    def save_info(self, k1, col_date, category, URL_2, article_title, good, bad, hits, article_text, article_comment,
+                  image_dir):
         sql_3 = """
                 INSERT INTO %s""" % self.table_1 + """(col_date, category, article_url, article_title, good, bad, hits, article_text, article_comment, article_image)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
-        self.curs.execute(sql_3, (col_date, category, URL_2, article_title, good, bad, hits, article_text, article_comment, image_dir))
+        self.curs.execute(sql_3, (
+        col_date, category, URL_2, article_title, good, bad, hits, article_text, article_comment, image_dir))
         self.db.commit()
         # ---save into normal table---
 
@@ -142,7 +145,7 @@ class processor_class:
         sql_5_1 = """
         DELETE FROM db_%s_duplication_check WHERE (col_date <
         ( SELECT MIN(col_date) FROM (SELECT col_date FROM db_%s_duplication_check ORDER BY col_date DESC LIMIT %s) AS min_col_data));
-        """ % (self.site, self.site, str(article_num*2+1))
+        """ % (self.site, self.site, str(article_num * 2 + 1))
         sql_5_2 = """
         DELETE FROM db_%s_duplication_check WHERE (col_date <
         ( SELECT MIN(col_date) FROM (SELECT col_date FROM db_%s_duplication_check where category = '%s' ORDER BY col_date DESC LIMIT %s) AS min_col_data)) and (category = '%s');
@@ -154,7 +157,6 @@ class processor_class:
         self.db.commit()
         print("###db duplication check table reset")
         time.sleep(self.rd)
-
 
     def status_logging(self, col_date, status, data_num):
         login_info = Secure_core.Info_db
@@ -244,7 +246,6 @@ class processor_class:
             else:
                 image_loc = path + "/" + str(img_name) + ".jpg"
 
-
             resp = urllib.request.urlopen(img_src)
             image = np.asarray(bytearray(resp.read()), dtype='uint8')
             image = cv2.imdecode(image, cv2.IMREAD_COLOR)
@@ -263,7 +264,6 @@ class processor_class:
 
             cv2.imwrite(image_loc, image_resize)
 
-
         return img_dir
 
     def err_report(self, col_date, error):
@@ -278,7 +278,7 @@ class processor_class:
         db.set_charset("utf8mb4")
         curs = db.cursor()
         sql_e = """
-                INSERT INTO cosmonaut_error_log"""+ """(col_date, module_name, error_exp)
+                INSERT INTO cosmonaut_error_log""" + """(col_date, module_name, error_exp)
                 VALUES (%s, %s, %s)
                 """
         curs.execute(sql_e, (col_date, self.module_name, error))
