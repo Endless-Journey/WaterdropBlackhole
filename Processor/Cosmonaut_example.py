@@ -3,12 +3,12 @@
 #Last update : 20221107
 
 
-from Alpha.Cosmonaut_processor import processor_class
+from Cosmonaut_processor import processor_class
 from bs4 import BeautifulSoup
 from datetime import datetime
 import requests
 import time
-from Alpha.Public import Secure_core
+import Secure_core
 import math
 import re
 
