@@ -25,14 +25,21 @@ def method_site():
     site = "site_name"
     domain = "site_domain"
     rd = 1
+    #URL의 페이지 주소
     page_str = "page/"
-    list_URL = ["URL_1",
-                "URL_2"
+    #수집하고자 하는 세부 URL
+    list_URL = [
+        "URL_1",
+        "URL_2"
                 ]
+    #카테고리
     list_category = ["category_1", "category_2"]
     cnt_last =180
+    #페이지 당 글 갯수
     article_num = 20
+    #페이지 시작 번호
     page_start = 1
+    #페이지
     page_end = math.ceil(cnt_last/(article_num*len(list_category)))
     if page_end == 1 or page_end == 2:
         page_end = 3
