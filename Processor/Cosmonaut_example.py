@@ -13,7 +13,7 @@ import math
 import re
 
 
-def method_site():
+def method_site():                   #TODO : Change mothod name
     print("*゜  (\ (\\")
     print("c(⌒(_*´ㅅ`)_")
     print("###method start")
@@ -24,27 +24,25 @@ def method_site():
 
     site = "site_name"
     domain = "site_domain"
-    rd = 1
-    #URL의 페이지 주소
-    page_str = "page/"
-    #수집하고자 하는 세부 URL
+    rd = 1                           #TODO : Cooling time, Basically 1
+    page_str = "page/"               #TODO : Page part of URL
     list_URL = [
         "URL_1",
         "URL_2"
-                ]
-    #카테고리
-    list_category = ["category_1", "category_2"]
-    cnt_last =180
-    #페이지 당 글 갯수
-    article_num = 20
-    #페이지 시작 번호
-    page_start = 1
-    #페이지
+                ]                    #TODO : Detail URL
+    list_category = [
+        "category_1",
+        "category_2"
+    ]                                #TODO : Category
+    cnt_last =180                    #TODO : Number of articles collected
+    article_num = 20                 #TODO : Number of posts per page
+    page_start = 1                   #TODO : number of start page
     page_end = math.ceil(cnt_last/(article_num*len(list_category)))
     if page_end == 1 or page_end == 2:
         page_end = 3
-    #page_end = 7
-    list_start = 1
+    #page_end = 7                    #TODO : Number of last page
+    list_start = 1                   #TODO : Number of first list num
+    cnt = 1                          #Count
     #---info---
 
     p_class = processor_class(site, list_URL, list_category, rd, page_str)
@@ -60,7 +58,6 @@ def method_site():
     p_class.create_dir()
     #---directory create---
 
-    cnt = 1
     for k0 in range(0, len(list_URL)):
         article_url_list = []
         recent_article_url = p_class.select_recent_article(k0)
@@ -76,31 +73,31 @@ def method_site():
             soup_1 = BeautifulSoup(html_1, 'html.parser')
 
 
-            list_articles = soup_1.find("table", {"class" : "board_list"})
-            list_articles = list_articles.find_all("tr")
+            list_articles = soup_1.find("table", {"class" : "board_list"})                                              #TODO : Check
+            list_articles = list_articles.find_all("tr")                                                                #TODO : Check
             #---load article list---
 
-            #list_articles = p_class.delete_notice(list_articles, '<span class="notice">')
+            #list_articles = p_class.delete_notice(list_articles, '<span class="notice">')                              #TODO : Check
             #---delete notice---
             article_num = len(list_articles)
 
             for k2 in range(list_start, len(list_articles)):
                 print("cosmonaut_%s"%site, k0+1, "-", k1, "-", k2, "total :", cnt)
-                #rd = random.randrange(1, 2, 1)
+                #rd = random.randrange(1, 2, 1)                                                                         #TODO : Check, Change cooling time
 
                 try:
                     col_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     #print("col_date: ", col_date)
                     # ---col_date---
 
-                    category = list_articles[k2].find("div", {"class" : "list-category"})
+                    category = list_articles[k2].find("div", {"class" : "list-category"})                               #TODO : Check
                     category = category.find("span")
                     category = category.get_text()
                     #category = list_category[k0]
                     print("category: ", category)
                     # ---category---
 
-                    x_3 = list_articles[k2].find("td", {"class" : "subject"})
+                    x_3 = list_articles[k2].find("td", {"class" : "subject"})                                           #TODO : Check
                     x_3 = x_3.find("a")
                     x_3 = x_3.attrs['href']
                     x_3 = x_3.lstrip(".")
@@ -118,7 +115,7 @@ def method_site():
                         continue
                     # ---duplication check---
 
-                    article_title = list_articles[k2].find("td", {"class" : "subject"})
+                    article_title = list_articles[k2].find("td", {"class" : "subject"})                                 #TODO : Check
                     article_title = article_title.find("a")
                     article_title = article_title.get_text()
                     #article_title = article_title.strip()
@@ -131,7 +128,7 @@ def method_site():
                     soup_2 = BeautifulSoup(html_2, 'html.parser')
                     # ---link to second page---
 
-                    good = soup_2.find("span", {"class" : "reqnum reqblue"})
+                    good = soup_2.find("span", {"class" : "reqnum reqblue"})                                            #TODO : Check
                     good = good.get_text()
                     good = good.replace(",", "")
                     if good == u"\xa0":
@@ -139,14 +136,14 @@ def method_site():
                     print("good: ", good)
                     # ---good---
 
-                    bad = soup_2.find("p", {"class" : "btn_different"})
+                    bad = soup_2.find("p", {"class" : "btn_different"})                                                 #TODO : Check
                     bad = bad.get_text()
                     bad = bad.replace(",", "")
                     #bad = None
                     print("bad: ", bad)
                     # ---bad---
 
-                    hits = list_articles[k2].find("td", {"class" : "hit"})
+                    hits = list_articles[k2].find("td", {"class" : "hit"})                                              #TODO : Check
                     hits = hits.get_text()
                     hits = hits.replace(",", "")
                     if hits == u"\xa0":
@@ -155,7 +152,7 @@ def method_site():
                     print("hits: ", hits)
                     # ---hits---
 
-                    main_div = soup_2.find("div", {"id" : "writeContents_sier"})
+                    main_div = soup_2.find("div", {"id" : "writeContents_sier"})                                        #TODO : Check
                     #main_div.find("div", {"id": "article-relation-link"}).decompose()
                     #---main_div---
 
@@ -165,7 +162,7 @@ def method_site():
                     # ---article_text---
 
                     try:
-                        image_src = main_div.find("img")
+                        image_src = main_div.find("img")                                                                #TODO : Check
                         image_src = image_src.attrs['src']
                         image_dir = p_class.image_process(image_src, col_date, domain)
 
@@ -176,7 +173,7 @@ def method_site():
                     #---image---
 
                     try:
-                        article_comment = ""
+                        article_comment = ""                                                                            #TODO : Check
                         ar_co = soup_2.find_all("div", {"class" : "ed comment-item clearfix"})
                         for k2_3 in ar_co:
                             k2_3 = k2_3.find("div", {"class" : "ed margin-bottom-xxsmall margin-left-xsmall"})
@@ -218,7 +215,7 @@ def method_site():
     p_class.status_logging(col_date, status_end, cnt)
     # ---logging---
 
-if __name__ == '__main__':
+if __name__ == '__main__':                                                                                              #TODO : Check
     method_site()
 
 

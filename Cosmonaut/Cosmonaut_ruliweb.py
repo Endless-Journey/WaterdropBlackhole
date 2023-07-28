@@ -24,6 +24,7 @@ def method_site():
 
     site = "site_name"
     domain = "site_domain"
+    #Cooling time, Basically 1
     rd = 1
     page_str = "page/"
     list_URL = ["URL_1",
