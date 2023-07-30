@@ -4,11 +4,10 @@ import requests
 import hashlib
 import os
 import pymysql
-import Secure_core
+from Info import Secure_core
 import re
 import urllib.request
 import time
-import io
 import cv2
 import numpy as np
 
@@ -25,7 +24,7 @@ class processor_class:
         self.date_Ymd = date.today().strftime('%Y%m%d')
         self.module_name = "Cosmonaut_" + self.site
         self.login_info = Secure_core.Info_db
-        self.table_1 = "db_%s_1_" % self.site + self.date_Ymd
+        self.table_1 = "db_%s_" % self.site + self.date_Ymd
 
         self.db = pymysql.connect(host=self.login_info["host"],
                                   port=self.login_info["port"],
@@ -46,10 +45,10 @@ class processor_class:
                 """ % self.table_1
             self.curs.execute(sql_1)
             self.db.commit()
-            print("###CREATE TABLE###")
+            print("### CREATE TABLE")
         except Exception as e:
-            print("*Exception_0_1 : ", e)
-            print("###table already exist")
+            error_msg = "### Exception_0_1 : " + str(e)
+            #print(error_msg)
         # ---table create---
 
     def create_dir(self):
@@ -58,8 +57,8 @@ class processor_class:
         try:
             os.makedirs(os.path.join(mkdir_path, mkdir_name))
         except Exception as e:
-            print("*Exception_0_2 : ", e)
-            print("###directory already exist")
+            error_msg = "### Exception_0_2 : " + str(e)
+            #print(error_msg)
         # ---directory create---
 
     def select_recent_article(self, k0):
@@ -76,7 +75,7 @@ class processor_class:
             else:
                 self.curs.execute(sql_2_2)
             recent_article_url = self.curs.fetchall()
-            print("###load data for duplication check from sql")
+            #print("### Load data for duplication check from sql")
         except Exception as e:
             error = "Exception_0_2 : " + str(e)
             self.err_report(self.col_date, error)
@@ -93,9 +92,9 @@ class processor_class:
                     self.page_str + "1", "").replace(self.page_str + "2", "")
                 if URL_2_temp_1 == recent_article_url_temp:
                     check = True
-                    print("###duplication detected in db!")
+                    print("### duplication detected in db!")
                     # print(URL_2, "v", recent_article_url_temp)
-                    print("###break crawling")
+                    print("### break crawling")
                     break
                 else:
                     check = False
@@ -113,7 +112,7 @@ class processor_class:
                 article_compare = True
                 break
         if article_compare == True:
-            print("###duplication detected!")
+            print("### duplication detected!")
             # print(k2_2, "v", URL_2_temp_2)
             return
         else:
@@ -155,7 +154,7 @@ class processor_class:
         else:
             self.curs.execute(sql_5_2)
         self.db.commit()
-        print("###db duplication check table reset")
+        #print("### db duplication check table reset")
         time.sleep(self.rd)
 
     def status_logging(self, col_date, status, data_num):

@@ -1,5 +1,5 @@
 import pymysql
-import Secure_core
+from Info import Secure_core
 import os
 
 site_name = "ruliweb"

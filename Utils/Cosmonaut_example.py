@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-#Cosmonaut_example ver1.004.20221126
-#Last update : 20221107
+#Cosmonaut_example ver2.000.20230730
+#Last update : 20230730
 
 
 from Cosmonaut_processor import processor_class
@@ -8,15 +8,26 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import requests
 import time
-import Secure_core
+from Info import Secure_core
 import math
 import re
 
 
-def method_site():                   #TODO : Change mothod name
+site = "site"                         #TODO : Change site name
+
+def infinite_loop():
+    cnt_loop = 1
+    while True:
+        print("### Cosmonaut :",  site, ", Loop : ", cnt_loop)
+        method_cosmonaut()
+        cnt_loop += 1
+
+        time.sleep(300)
+
+def method_cosmonaut():
     print("*゜  (\ (\\")
     print("c(⌒(_*´ㅅ`)_")
-    print("###method start")
+    print("### method start")
     module_info = Secure_core.Info_module
     headers = {"User-Agent": module_info["user-agent"] }
     col_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -24,17 +35,17 @@ def method_site():                   #TODO : Change mothod name
 
     site = "site_name"
     domain = "site_domain"
-    rd = 1                           #TODO : Cooling time, Basically 1
-    page_str = "page/"               #TODO : Page part of URL
+    rd = 1                           #TODO : Cooling time, Default = 1
+    page_str = "page/"               #TODO : Page part of URL, ex) &page= or page/
     list_URL = [
         "URL_1",
         "URL_2"
-                ]                    #TODO : Detail URL
+                ]                    #TODO : Detail URL, Delete part of page
     list_category = [
         "category_1",
         "category_2"
     ]                                #TODO : Category
-    cnt_last =180                    #TODO : Number of articles collected
+    cnt_last = 180                   #TODO : Number of articles collected, Default = 180
     article_num = 20                 #TODO : Number of posts per page
     page_start = 1                   #TODO : number of start page
     page_end = math.ceil(cnt_last/(article_num*len(list_category)))
@@ -64,7 +75,7 @@ def method_site():                   #TODO : Change mothod name
         # ---select data for duplicaion check---
 
         for k1 in range(page_start, page_end):
-            print("###", k1, "page start###")
+            print("### Cosmonaut :", site, ", ", "page : ", k1, ", total : ", cnt)
             URL_1 = list_URL[k0] + str(k1)
             response_1 = requests.get(URL_1, headers=headers)
             #response_1.encoding = 'UTF-8'
@@ -74,7 +85,7 @@ def method_site():                   #TODO : Change mothod name
 
 
             list_articles = soup_1.find("table", {"class" : "board_list"})                                              #TODO : Check
-            list_articles = list_articles.find_all("tr")                                                                #TODO : Check
+            list_articles = list_articles.find_all("tr")
             #---load article list---
 
             #list_articles = p_class.delete_notice(list_articles, '<span class="notice">')                              #TODO : Check
@@ -97,11 +108,11 @@ def method_site():                   #TODO : Change mothod name
                     print("category: ", category)
                     # ---category---
 
-                    x_3 = list_articles[k2].find("td", {"class" : "subject"})                                           #TODO : Check
-                    x_3 = x_3.find("a")
-                    x_3 = x_3.attrs['href']
-                    x_3 = x_3.lstrip(".")
-                    URL_2 = domain + x_3
+                    article_URL = list_articles[k2].find("td", {"class" : "subject"})                                           #TODO : Check
+                    article_URL = article_URL.find("a")
+                    article_URL = article_URL.attrs['href']
+                    article_URL = article_URL.lstrip(".")
+                    URL_2 = domain + article_URL
                     print("article_url: ", URL_2)
                     # ---article_url---
 
@@ -122,11 +133,24 @@ def method_site():                   #TODO : Change mothod name
                     print("article_title: ", article_title)
                     # ---article_title---
 
+                    hits = list_articles[k2].find("td", {"class" : "hit"})                                              #TODO : Check
+                    hits = hits.get_text()
+                    hits = hits.replace(",", "")
+                    if hits == u"\xa0":
+                        hits = None
+                    hits = re.sub(r'[^0-9]', '', hits)
+                    print("hits: ", hits)
+                    # ---hits---
+
                     response_2 = requests.get(URL_2, headers=headers)
                     #response_2.encoding = 'UTF-8'
                     html_2 = response_2.text
                     soup_2 = BeautifulSoup(html_2, 'html.parser')
                     # ---link to second page---
+
+                    # ---------------------
+                    # --- Enter article ---
+                    # ---------------------
 
                     good = soup_2.find("span", {"class" : "reqnum reqblue"})                                            #TODO : Check
                     good = good.get_text()
@@ -139,18 +163,11 @@ def method_site():                   #TODO : Change mothod name
                     bad = soup_2.find("p", {"class" : "btn_different"})                                                 #TODO : Check
                     bad = bad.get_text()
                     bad = bad.replace(",", "")
+                    if bad == u"\xa0":
+                        bad = None
                     #bad = None
                     print("bad: ", bad)
                     # ---bad---
-
-                    hits = list_articles[k2].find("td", {"class" : "hit"})                                              #TODO : Check
-                    hits = hits.get_text()
-                    hits = hits.replace(",", "")
-                    if hits == u"\xa0":
-                        hits = None
-                    hits = re.sub(r'[^0-9]', '', hits)
-                    print("hits: ", hits)
-                    # ---hits---
 
                     main_div = soup_2.find("div", {"id" : "writeContents_sier"})                                        #TODO : Check
                     #main_div.find("div", {"id": "article-relation-link"}).decompose()
@@ -213,9 +230,13 @@ def method_site():                   #TODO : Change mothod name
 
     status_end = "end"
     p_class.status_logging(col_date, status_end, cnt)
+    print("*゜  (\ (\\")
+    print("c(⌒(_*'ㅅ')_")
+    print("###method end")
     # ---logging---
 
-if __name__ == '__main__':                                                                                              #TODO : Check
-    method_site()
+if __name__ == '__main__':
+    method_cosmonaut()
+
 
 

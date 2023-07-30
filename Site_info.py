@@ -1,3 +1,4 @@
+from Cosmonaut import Cosmonaut_ruliweb
 from Alpha.Cosmonaut_site import Cosmonaut_dogdrip
 from Alpha.Cosmonaut_site import Cosmonaut_instiz
 from Alpha.Cosmonaut_site import Cosmonaut_inven
