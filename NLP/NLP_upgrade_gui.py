@@ -9,8 +9,13 @@ from NLP_upgrade import NLP_class
 
 
 ### NLP_upgrade_gui
-### PyKomoran의 성능을 "업그레이드"하기 위해 제작되어짐
-### 업그레이드를 보조하기 위한 GUI
+### PyKomoran의 성능을 "업그레이드"를 보조하기 위한 시스템
+### change_list_V : 동사를 수정한다
+### change_list_type : 오타를 감지하여 수정하는 기능
+### delete_list : 제거할 단어 리스트
+### add_dict_user : 명사를 추가한다.
+### add_fwd_user :
+
 
 
 class MyApp(QWidget):

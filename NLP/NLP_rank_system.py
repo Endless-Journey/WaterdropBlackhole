@@ -14,26 +14,35 @@ db = pymysql.connect(host=login_info["host"],
 
 curs = db.cursor()
 sql = """
-SELECT article_text FROM db_ruliweb_20230730;
+SELECT article_title, article_text, article_comment FROM db_ruliweb_20230801 WHERE col_date >= '2023-08-01 18:20:00' AND col_date <= '2023-08-01 21:20:00';
 """
 curs.execute(sql)
 result = curs.fetchall()
 
-NLP_list = ""
+NLP_list = []
 
 for items in result:
-    NLP_list += items[0]
-    #print(items[0])
+    article_contents = ""
 
-NLP = NLP_class()
-result = NLP.NLP_upgrade_module_NOUNS(NLP_list)
-print(result)
-print(result.sort())
+    items0 = items[0]
+    if items0 is not None:
+        article_contents += items[0]
+
+    items1 = items[1]
+    if items1 is not None:
+        article_contents += items[1]
+
+    items2 = items[2]
+    if items2 is not None:
+        article_contents += items[2]
+
+    NLP_result = NLP.NLP_upgrade_module_NOUNS(article_contents)
+
+    NLP_list += NLP_result
 
 dict_origin = {}
 
-
-for noun in result:
+for noun in NLP_list:
     if dict_origin.get(noun) is None:
         dict_origin[noun] = 1
     else:

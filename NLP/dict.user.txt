@@ -747,3 +747,4 @@ LK-99	NNP
 최원태	NNP
 탁송기사	NNP
 드리프트	NNP
+주변인식	NNP

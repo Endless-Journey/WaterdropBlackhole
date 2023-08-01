@@ -3,6 +3,8 @@ import json
 import time
 import re
 
+
+
 class NLP_class:
     def __init__(self):
         self.komoran = Komoran("EXP")
@@ -12,6 +14,7 @@ class NLP_class:
         self.tag_list_2 = ["VV", "XR", "VA"]
         #self.tag_list_2 = []
 
+    # 형태소 분석기를 사용하여 명사만 추출하는 메서드
     def NLP_upgrade_module_NOUNS(self, text_input):
         text_input = text_input.replace("\t", "").replace("\n", "")
         text_input = re.sub("[ㄱ-ㅎ]+", "", text_input)
@@ -19,7 +22,7 @@ class NLP_class:
         text_input = re.sub("\s+", " ", text_input)
         text_input = re.sub("http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", "", text_input)
         text_input = text_input.strip()
-        #print(self.komoran.get_plain_text(text_input))
+        #print(self.komoran.get_plain_text(text_input))ㄱ
 
         with open("NLP_upgrade_js_change_typo.json", "r", encoding='UTF-8') as json_file:
             change_list_typo = json.load(json_file)
