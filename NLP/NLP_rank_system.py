@@ -14,7 +14,7 @@ db = pymysql.connect(host=login_info["host"],
 
 curs = db.cursor()
 sql = """
-SELECT article_title, article_text, article_comment FROM db_ruliweb_20230801 WHERE col_date >= '2023-08-01 18:20:00' AND col_date <= '2023-08-01 21:20:00';
+SELECT article_title, article_text, article_comment FROM db_ruliweb_20230801 WHERE col_date >= '2023-08-01 18:20:00' AND col_date <= '2023-08-01 23:20:00';
 """
 curs.execute(sql)
 result = curs.fetchall()
