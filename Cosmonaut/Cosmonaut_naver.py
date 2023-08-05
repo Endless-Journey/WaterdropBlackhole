@@ -35,9 +35,9 @@ search_list_entertainment = ["221", "224", "225", "7a5", "309"]
 # 221 : 연예가화제, 224 : 방송/TV, 225 : 드라마, 309 : 해외뮤직, 7a5 : 뮤직
 search_list_sports = ["kbaseball", "wbaseball", "kfootball", "wfootball", "basketball", "volleyball", "golf", "general", "esports"]
 
-date_one = "20230801"
-
 class p_data_collect:
+    def __init__(self, date_one):
+        self.date_one = date_one
 
     print("### Cosmonaut_naver start###")
 
@@ -55,7 +55,7 @@ class p_data_collect:
             # ---------------------------------------------------------
 
             # Create image directory
-            mkdir_path = "E:/Data/Data_img/Data_img_naver/%s/"%search_list_major_1[k1] + "%s_%s" % (search_list_major_1[k1], date_one)
+            mkdir_path = "E:/Data/Data_img/Data_img_naver/%s/"%search_list_major_1[k1] + "%s_%s" % (search_list_major_1[k1], self.date_one)
             try:
                 os.makedirs(mkdir_path)
             except Exception as e:
@@ -81,7 +81,7 @@ class p_data_collect:
                         now_time = datetime.now()
                         print("Page :", k3, "start, time : [%s]" % now_time)
 
-                        URL_complete = URL_general_article + k2 + "&sid1=" + search_list_major_2[k1] + "&date=" + date_one + "&page=" + "%s"%k3
+                        URL_complete = URL_general_article + k2 + "&sid1=" + search_list_major_2[k1] + "&date=" + self.date_one + "&page=" + "%s"%k3
                         #print("article_list_URL : ", URL_complete)
 
                         driver.get(URL_complete)
@@ -148,7 +148,7 @@ class p_data_collect:
                         now_time = datetime.now()
                         print("Page :", k3, "start, time : [%s]" % now_time)
 
-                        date_for_enter = date_one[0:4] + "-" + date_one[4:6] + "-" + date_one[6:8]
+                        date_for_enter = self.date_one[0:4] + "-" + self.date_one[4:6] + "-" + self.date_one[6:8]
                         URL_complete = URL_entertainment_article + k2 + "#sid=" + k2 + "&date=" + date_for_enter + "&page=" + "%s" % k3
                         #print("article_list_URL : ", URL_complete)
                         driver.get(URL_complete)
@@ -194,12 +194,15 @@ class p_data_collect:
                 for k2 in search_list_sports:
                     if k2 == "esports":
                         now_time = datetime.now()
-                        print("esports start, time" % now_time)
+                        print("esports start, time : [%s]" % now_time)
 
-                        URL_complete = "https://game.naver.com/esports/news/all?date=" + "%s-%s-%s"%(date_one[0:4], date_one[4:6], date_one[6:8])
+                        URL_complete = "https://game.naver.com/esports/news/all?date=" + "%s-%s-%s"%(self.date_one[0:4], self.date_one[4:6], self.date_one[6:8])
                         driver.get(URL_complete)
                         ti.sleep(0.5)
-                        driver.find_element(By.CLASS_NAME, "news_list_more_btn__3QwSl").click()
+                        try:
+                            driver.find_element(By.CLASS_NAME, "news_list_more_btn__3QwSl").click()
+                        except:
+                            print("Last Page")
                         ti.sleep(0.2)
                         html = driver.page_source
                         soup = BeautifulSoup(html, 'html.parser')
@@ -232,7 +235,7 @@ class p_data_collect:
 
                     article_url_list = []
                     for k3 in range(1, 10):
-                        URL_complete = URL_sports_article + k2 + "/news/index?isphoto=N&date=" + "&date=" + date_one + "&page=" + "%s" % k3
+                        URL_complete = URL_sports_article + k2 + "/news/index?isphoto=N&date=" + "&date=" + self.date_one + "&page=" + "%s" % k3
 
                         now_time = datetime.now()
                         print("Page :", k3, "start, time : [%s]" % now_time)
@@ -290,7 +293,7 @@ class p_data_collect:
                              passwd='mysql0788',
                              db='nnews_%s'%search_list_major_1[k1],
                              charset='utf8')
-        table_name = "%s_"%search_list_major_1[k1] + date_one
+        table_name = "%s_"%search_list_major_1[k1] + self.date_one
 
         if k1 < 6:
             try:
@@ -401,7 +404,7 @@ class p_data_collect:
 
             # 기사 평가 수집
             # 2022년 4월 27일 기점으로 기사의 평가 방식이 변경됨. 2022년 4월 27일 이후로는 기사 평가가 크게 의미있지 않기 때문에 수집하지 않음.
-            if int(date_one) <= 20220427:
+            if int(self.date_one) <= 20220427:
                 try:
                     good_1 = soup.find("a", {"data-type": "like"})
                     good_2 = good_1.find("span", {"class": "u_likeit_list_count _count"})
@@ -768,7 +771,7 @@ class p_data_collect:
             col_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             image_name = search_list_major_1[k1] + col_date
             image_name = hashlib.md5(image_name.encode()).hexdigest()
-            image_path = "E:/Data/Data_img/Data_img_naver/%s/"%search_list_major_1[k1] + "%s_%s"%(search_list_major_1[k1], date_one)
+            image_path = "E:/Data/Data_img/Data_img_naver/%s/"%search_list_major_1[k1] + "%s_%s"%(search_list_major_1[k1], self.date_one)
 
             image_loc = image_path + "/" + str(image_name) + ".jpg"
             image_PIL = Image.open(requests.get(image_4, stream=True).raw)
@@ -786,7 +789,7 @@ class p_data_collect:
                              db='nnews_%s' % search_list_major_1[k1],
                              charset='utf8')
 
-        table_name = "%s_" % search_list_major_1[k1] + date_one
+        table_name = "%s_" % search_list_major_1[k1] + self.date_one
 
         try:
 
@@ -824,7 +827,10 @@ class p_data_collect:
         except Exception as e:
             print("Exception : ", e)
 
-start = p_data_collect()
-start.main_method()
-#시동 걸기
+if __name__ == '__main__':
+    date_list = ["20180103", "20180104"]
+    for date in date_list:
+        MainClass = p_data_collect(date)
+        MainClass.main_method()
+
 
