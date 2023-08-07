@@ -35,6 +35,7 @@ search_list_entertainment = ["221", "224", "225", "7a5", "309"]
 # 221 : 연예가화제, 224 : 방송/TV, 225 : 드라마, 309 : 해외뮤직, 7a5 : 뮤직
 search_list_sports = ["kbaseball", "wbaseball", "kfootball", "wfootball", "basketball", "volleyball", "golf", "general", "esports"]
 
+
 class p_data_collect:
     def __init__(self, date_one):
         self.date_one = date_one
@@ -42,7 +43,9 @@ class p_data_collect:
     print("### Cosmonaut_naver start###")
 
     def main_method(self):
-        driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        driver = webdriver.Chrome(options=options)
         driver.implicitly_wait(100)
         URL_general_article = "https://news.naver.com/main/list.naver?mode=LS2D&mid=sec&sid2="
         URL_entertainment_article = "https://entertain.naver.com/now?sid="
@@ -67,19 +70,19 @@ class p_data_collect:
                 now_time = datetime.now()
                 print("*゜  (\ (\\")
                 print("c(⌒(_*´ㅅ`)_")
-                print("Category :", search_list_major_1[k1], "start, time : [%s]" % now_time)
+                print("Date :", self.date_one, "Main :", search_list_major_1[k1], "#time : [%s]" % now_time)
                 v1 = globals()['search_list_{}'.format(search_list_major_1[k1])]
 
                 for k2 in v1:
                 #k2 : 서브 카테고리
                     now_time = datetime.now()
-                    print("Subcategory :", k2, "start, time : [%s]" % now_time)
+                    print("Date :", self.date_one, "Main :", search_list_major_1[k1], "Sub :", k2, "#time : [%s]" % now_time)
 
                     article_url_list = []
                     for k3 in range(1, 10):
                     #k3 : 페이지
                         now_time = datetime.now()
-                        print("Page :", k3, "start, time : [%s]" % now_time)
+                        print("Date :", self.date_one, "Main :", search_list_major_1[k1], "Sub :", k2, "Page :", k3, "#time : [%s]" % now_time)
 
                         URL_complete = URL_general_article + k2 + "&sid1=" + search_list_major_2[k1] + "&date=" + self.date_one + "&page=" + "%s"%k3
                         #print("article_list_URL : ", URL_complete)
@@ -140,13 +143,13 @@ class p_data_collect:
 
             elif k1 == 6:
                 now_time = datetime.now()
-                print("Subcategory :", k2, "start, time : [%s]" % now_time)
+                print("Date :", self.date_one, "Main :", search_list_major_1[k1], "#time : [%s]" % now_time)
 
                 for k2 in search_list_entertainment:
                     article_url_list = []
                     for k3 in range(1,10):
                         now_time = datetime.now()
-                        print("Page :", k3, "start, time : [%s]" % now_time)
+                        print("Date :", self.date_one, "Main :", search_list_major_1[k1], "Sub :", k2, "Page :", k3, "#time : [%s]" % now_time)
 
                         date_for_enter = self.date_one[0:4] + "-" + self.date_one[4:6] + "-" + self.date_one[6:8]
                         URL_complete = URL_entertainment_article + k2 + "#sid=" + k2 + "&date=" + date_for_enter + "&page=" + "%s" % k3
@@ -189,12 +192,12 @@ class p_data_collect:
 
             elif k1 == 7:
                 now_time = datetime.now()
-                print("Subcategory :", k2, "start, time : [%s]" % now_time)
+                print("Date :", self.date_one, "Main :", search_list_major_1[k1], "#time : [%s]" % now_time)
 
                 for k2 in search_list_sports:
                     if k2 == "esports":
                         now_time = datetime.now()
-                        print("esports start, time : [%s]" % now_time)
+                        print("Date :", self.date_one, "Main :", search_list_major_1[k1], "Sub :", k2, "#time : [%s]" % now_time)
 
                         URL_complete = "https://game.naver.com/esports/news/all?date=" + "%s-%s-%s"%(self.date_one[0:4], self.date_one[4:6], self.date_one[6:8])
                         driver.get(URL_complete)
@@ -238,7 +241,7 @@ class p_data_collect:
                         URL_complete = URL_sports_article + k2 + "/news/index?isphoto=N&date=" + "&date=" + self.date_one + "&page=" + "%s" % k3
 
                         now_time = datetime.now()
-                        print("Page :", k3, "start, time : [%s]" % now_time)
+                        print("Date :", self.date_one, "Main :", search_list_major_1[k1], "Sub :", k2, "Page :", k3, "#time : [%s]" % now_time)
 
                         driver.get(URL_complete)
                         ti.sleep(0.5)
@@ -358,7 +361,7 @@ class p_data_collect:
         self.URL = URL
 
         article_url = URL
-        print("article_url :", article_url)
+        #print("article_url :", article_url)
 
         sub_category = k2
         #print("sub_category :", sub_category)
@@ -759,12 +762,7 @@ class p_data_collect:
         #------------------------------------------- 기사 제목 -------------------------------------------
 
         try:
-            image_1 = soup.find("div" , {"class" : "go_trans _article_content"})
-            if image_1 == None:
-                image_1 = soup.find("div" , {"class" : "article_body font1 size3"})
-                if image_1 == None:
-                    image_1 = soup.find("div", {"class": "news_end font1 size3"})
-            image_2 = image_1.find("span", {"class": "end_photo_org"})
+            image_2 = soup.find("span", {"class": "end_photo_org"})
             image_3 = image_2.find("img")
             image_4 = image_3.attrs['src']
 
@@ -827,8 +825,9 @@ class p_data_collect:
         except Exception as e:
             print("Exception : ", e)
 
+
 if __name__ == '__main__':
-    date_list = ["20180103", "20180104"]
+    date_list = ["20180110"]
     for date in date_list:
         MainClass = p_data_collect(date)
         MainClass.main_method()
