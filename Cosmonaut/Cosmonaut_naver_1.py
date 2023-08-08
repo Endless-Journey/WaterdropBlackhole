@@ -825,7 +825,7 @@ class p_data_collect:
             print("Exception : ", e)
 
 if __name__ == '__main__':
-    date_list = ["20180109"]
+    date_list = ["20180111"]
     for date in date_list:
         MainClass = p_data_collect(date)
         MainClass.main_method()
