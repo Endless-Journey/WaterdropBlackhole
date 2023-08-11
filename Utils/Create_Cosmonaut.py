@@ -2,23 +2,24 @@ import pymysql
 from Info import Secure_core
 import os
 
-site_name = "ruliweb"
-login_info = Secure_core.Info
+#웹사이트 수집을 위한 파일 생성
 
+site_name = "dogdrip"
+login_info = Secure_core.Info_db
 
 #1. 크롤링 스크립트 생성
-"""
+
 try:
     py_cosmonaut = open("Cosmonaut_example.py", encoding="UTF-8")
     py_cosmonaut_data = py_cosmonaut.read()
-    py_name = "Cosmonaut_site/Cosmonaut_" + site_name + ".py"
+    py_name = "../Cosmonaut/Cosmonaut_" + site_name + ".py"
     f = open(py_name, 'w', encoding="UTF-8")
     f.write(py_cosmonaut_data)
     f.close()
     print("create [python pile] success")
-except:
-    print("python pile already exist")
-"""
+except Exception as e:
+    print("python pile already exist Error :", e)
+
 
 #-------------------------------------------------------------------------
 
@@ -37,8 +38,8 @@ try:
     curs.execute(sql)
     db.commit()
     print("create [schema] success")
-except:
-    print("db already exist")
+except Exception as e:
+    print("db already exist Error :", e)
 
 #-------------------------------------------------------------------------
 
@@ -59,8 +60,8 @@ try:
     curs_table.execute(sql_table)
     db_table.commit()
     print("create [table] success")
-except:
-    print("table already exist")
+except Exception as e:
+    print("table already exist Error :", e)
 
 #-------------------------------------------------------------------------
 
@@ -69,5 +70,5 @@ try:
     mkdir_path = "E:\Data\Data_img"
     mkdir_name = "Data_img_%s"%site_name
     os.makedirs(os.path.join(mkdir_path, mkdir_name))
-except:
-    print("create [img directory] success")
+except Exception as e:
+    print("create [img directory] success Error :", e)
