@@ -3,7 +3,7 @@
 #Last update : 20230730
 
 
-from Cosmonaut_processor import processor_class
+from Utils.Cosmonaut_processor import processor_class
 from bs4 import BeautifulSoup
 from datetime import datetime
 import requests

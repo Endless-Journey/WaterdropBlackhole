@@ -3,7 +3,7 @@
 #Last update : 20230730
 
 
-from Cosmonaut_processor import processor_class
+from Utils.Cosmonaut_processor import processor_class
 from bs4 import BeautifulSoup
 from datetime import datetime
 import requests
@@ -13,7 +13,7 @@ import math
 import re
 
 
-site = "site"                         #TODO : Change site name
+site = "dogdrip"
 
 def infinite_loop():
     cnt_loop = 1
@@ -33,7 +33,7 @@ def method_cosmonaut():
     col_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     #---default info---
 
-    site = "site_name"
+    site = "dogdrip"
     domain = "site_domain"
     rd = 1                           #TODO : Cooling time, Default = 1
     page_str = "page/"               #TODO : Page part of URL, ex) &page= or page/
