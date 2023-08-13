@@ -34,9 +34,9 @@ def method_cosmonaut():
     #---default info---
 
     site = "dogdrip"
-    domain = "site_domain"
-    rd = 1                           #TODO : Cooling time, Default = 1
-    page_str = "page/"               #TODO : Page part of URL, ex) &page= or page/
+    domain = "https://www.dogdrip.net/"
+    rd = 1
+    page_str = "?page="
     list_URL = [
         "URL_1",
         "URL_2"
